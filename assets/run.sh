@@ -2,14 +2,17 @@
 # Every Roblosats service starts through this: it waits for the coordinator's onion and for
 # Lightning Fork's credentials, works out what depends on them, then runs the image's entrypoint
 # with the service's command. Same as the Umbrel app's run.sh; on StartOS the settings come from
-# settings.env (the defaults, in this package) and the panel's settings.local.env, and the secrets,
+# defaults.env (the recommended ones, in this package) and the panel's settings.local.env (only
+# what the user changed), and the secrets,
 # Lightning Fork's gRPC address and the node's RPC (node-rpc.py) come in the environment.
 set -e
 
 set -a
-. /startos/settings.env
+. /startos/defaults.env
 [ -s /data/panel/settings.local.env ] && . /data/panel/settings.local.env
 set +a
+# No single buyer payout above the largest order, as on Kilobot.
+export PAYOUT_MAX_SATS="${PAYOUT_MAX_SATS:-$MAX_ORDER_SIZE}"
 
 onion_file=/tor/coordinator/hostname
 until [ -s "$onion_file" ]; do echo "waiting for the coordinator's onion"; sleep 3; done
@@ -46,7 +49,7 @@ fi
 
 # The superuser the escrow and the admin panel use, with this service's admin password, once.
 if [ "${ROBLOSATS_ROLE:-}" = main ]; then
-  python3 manage.py migrate_locked --noinput 2>/dev/null || python3 manage.py migrate --noinput
+  python3 manage.py migrate_locked
   DJANGO_SUPERUSER_USERNAME="${ESCROW_USERNAME:-admin}" DJANGO_SUPERUSER_PASSWORD="$ADMIN_PASSWORD" DJANGO_SUPERUSER_EMAIL=admin@localhost \
     python3 manage.py createsuperuser --noinput 2>/dev/null && echo "admin user created" || true
 else

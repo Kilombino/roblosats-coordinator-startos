@@ -3,6 +3,7 @@ import { mkdir } from 'fs/promises'
 import { secretsEnv } from './fileModels/secrets.env'
 import { i18n } from './i18n'
 import { sdk } from './sdk'
+import { current } from './versions/current'
 import {
   adminUser,
   lightningId,
@@ -16,6 +17,7 @@ import {
 } from './utils'
 
 const ok = { result: 'success' as const, message: null }
+const packageVersion = current.options.version
 
 export const main = sdk.setupMain(async ({ effects }) => {
   console.info(i18n('Starting Roblosats Coordinator'))
@@ -324,12 +326,38 @@ export const main = sdk.setupMain(async ({ effects }) => {
 
   return daemons
     .addDaemon('panel', {
-      // The app's page (/setup/): status, identity, liquidity, settings and the request to join
-      // the federation, signed by the node. Never on the onion.
-      subcontainer: coordinator('panel'),
+      // The app's page (/setup/): status, identity, liquidity, settings, backup and the request to
+      // join the federation, signed by the node. Never on the onion. It sees the whole 'main'
+      // volume: a backup import writes the onion's keys, secrets.env and the settings there.
+      subcontainer: sdk.SubContainer.of(
+        effects,
+        { imageId: 'roblosats' },
+        sdk.Mounts.of()
+          .mountAssets({ subpath: null, mountpoint: mnt.assets })
+          .mountVolume({
+            volumeId: 'main',
+            subpath: null,
+            mountpoint: mnt.main,
+            readonly: false,
+          })
+          .mountDependency<T.SDKManifest>({
+            dependencyId: lightningId,
+            volumeId: 'main',
+            subpath: null,
+            mountpoint: mnt.lnd,
+            readonly: true,
+          }),
+        'panel',
+      ),
       exec: {
         command: ['python3', '/startos/panel.py'],
-        env,
+        env: {
+          ...env,
+          PANEL_PLATFORM: 'startos',
+          APP_VERSION: packageVersion,
+          // The admin login that a restored database is given (this install's).
+          ADMIN_PASSWORD: secrets.ADMIN_PASSWORD,
+        },
       },
       ready: {
         display: null,
@@ -340,6 +368,33 @@ export const main = sdk.setupMain(async ({ effects }) => {
           }),
       },
       requires: [],
+    })
+    .addDaemon('db-tool', {
+      // The database side of the page's backups: pg_dump and psql, which the Roblosats image
+      // lacks. Asked through files in main/panel/backup (see db-tool.sh).
+      subcontainer: sdk.SubContainer.of(
+        effects,
+        { imageId: 'postgres' },
+        sdk.Mounts.of()
+          .mountAssets({
+            subpath: 'db-tool.sh',
+            mountpoint: '/db-tool.sh',
+            type: 'file',
+          })
+          .mountVolume({
+            volumeId: 'main',
+            subpath: 'panel',
+            mountpoint: '/work',
+            readonly: false,
+          }),
+        'db-tool',
+      ),
+      exec: {
+        command: ['/bin/sh', '/db-tool.sh'],
+        env: { POSTGRES_PASSWORD: secrets.POSTGRES_PASSWORD },
+      },
+      ready: { display: null, fn: () => ok },
+      requires: ['postgres'],
     })
     .addDaemon('nginx', {
       subcontainer: sdk.SubContainer.of(
@@ -391,6 +446,17 @@ export const main = sdk.setupMain(async ({ effects }) => {
           .mountAssets({
             subpath: 'federation_urls.txt',
             mountpoint: '/app/federation_urls.txt',
+            type: 'file',
+          })
+          // The image's sync, plus publishing the orders to public relays, as Kilobot does.
+          .mountAssets({
+            subpath: 'relay-sync.sh',
+            mountpoint: '/app/sync.sh',
+            type: 'file',
+          })
+          .mountAssets({
+            subpath: 'external_urls.txt',
+            mountpoint: '/app/external_urls.txt',
             type: 'file',
           })
           .mountVolume({

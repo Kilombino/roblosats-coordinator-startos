@@ -6,11 +6,12 @@ Develop it inside a StartOS packaging workspace created by `start-cli s9pk init-
 which provides the packaging guide and agent context one level up. If you're reading this in a
 bare clone with no workspace, the full guide is at <https://docs.start9.com/packaging>.
 
-- **`assets/` mirrors the Umbrel app's files** (Kilombino/umbrel-store `tools/roblosats-coordinator`
-  and `kilombino-roblosats-coordinator/data/settings.env`). Port a change there by hand; what differs
-  here, on purpose: paths (`/startos`, `/data/panel`), the platform's wording in `panel.py`, run.sh
-  sourcing the settings itself and taking the node from `node-rpc.py` (new here), and nginx dropping
-  the `Authorization` header of StartOS's login before Django.
+- **`assets/` mirrors the Umbrel app's files** (Kilombino/umbrel-store `tools/roblosats-coordinator`).
+  `panel.py`, `defaults.env`, `db-tool.sh`, `relay-sync.sh`, `external_urls.txt`, `strfry.conf`,
+  `federation_urls.txt` are byte-for-byte copies (`panel.py` picks paths and wording from
+  `PANEL_PLATFORM`): copy them, don't edit them here. What differs on purpose: run.sh sourcing the
+  settings itself and taking the node from `node-rpc.py` (new here), and nginx checking StartOS's
+  login and dropping its `Authorization` header before Django.
 - **Keep the onion in the package's own tor daemon**: the onion is the coordinator's identity in the
   federation, and StartOS's Tor plugin would keep its keys outside this service's backups.
 - **Packing the second architecture**: start10's docker holds these images by digest for production

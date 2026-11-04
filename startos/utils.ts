@@ -36,6 +36,8 @@ export const knotsRpcPort = 18443
 export const mnt = {
   assets: '/startos',
   panel: '/data/panel',
+  /** The whole 'main' volume, for the app's page only (backups write the onion and secrets). */
+  main: '/main',
   tor: '/tor',
   static: '/usr/src/static',
   lnd: '/lnd',
@@ -66,7 +68,7 @@ export const nodeRpcBridge = (effects: T.Effects) =>
 /**
  * The Roblosats server's environment, as in the Umbrel app's docker-compose.yml (x-roblosats).
  * The operator's settings (name, fees, limits…) are not here: run.sh reads them from
- * settings.env and the app page's settings.local.env.
+ * defaults.env (Kilobot's) and the app page's settings.local.env (what the user changed).
  */
 export const roblosatsEnv = {
   SKIP_COLLECT_STATIC: 'true',
