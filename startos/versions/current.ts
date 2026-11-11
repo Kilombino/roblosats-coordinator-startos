@@ -1,18 +1,18 @@
 import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.8.8.29:0',
+  version: '0.8.8.30:0',
   releaseNotes: {
     en_US:
-      'Disputes are no longer solved automatically: when a chat expires with one side silent, the order comes to you as a dispute instead of being decided by who wrote last (the same change RoboSats makes in 0.8.8). Admin (0.8.8-rl28): solve a dispute with "Penalize the seller" or "Penalize the buyer" when there was no trade (each side gets its escrow back and only the one at fault loses the bond); a solved dispute shows its outcome and who gets what; new Failed payouts page with a count in the menu.',
+      'When the lightning payout to a buyer fails, the buyer can now switch to an onchain address from the "payment failed" screen (only if you offer onchain payouts; same swap fee and limits). Before paying onchain the server cancels the lightning payout, checks with LND that no attempt is in flight or already paid, and checks the escrow again; audit_payouts reports any order paid both ways.',
     es_ES:
-      'Las disputas ya no se resuelven solas: si un chat caduca con una de las partes en silencio, la orden te llega como disputa en vez de decidirse por quién escribió el último (el mismo cambio que hace RoboSats en la 0.8.8). Admin (0.8.8-rl28): resolver una disputa con «Penalizar al vendedor» o «Penalizar al comprador» cuando no hubo intercambio (cada parte recupera su escrow y solo el culpable pierde la fianza); una disputa resuelta muestra el resultado y a quién le toca qué; nueva página de pagos fallidos con contador en el menú.',
+      'Si falla el pago Lightning a un comprador, ahora puede pasarse a una dirección on-chain desde la pantalla de «pago fallido» (solo si ofreces cobros on-chain; misma comisión de swap y mismos límites). Antes de pagar on-chain, el servidor cancela el pago Lightning, comprueba con LND que no queda ningún intento en vuelo ni pagado y vuelve a comprobar el depósito; audit_payouts avisa si alguna orden se paga por las dos vías.',
     de_DE:
-      'Streitfälle werden nicht mehr automatisch entschieden: läuft ein Chat ab und eine Seite schweigt, wird die Order zum Streitfall für dich. Admin: „Verkäufer/Käufer bestrafen“ ohne Handel, Ergebnis eines gelösten Streitfalls, neue Seite für fehlgeschlagene Auszahlungen.',
+      'Schlägt die Lightning-Auszahlung an einen Käufer fehl, kann er jetzt im Bildschirm „Zahlung fehlgeschlagen“ auf eine Onchain-Adresse wechseln (nur wenn du Onchain-Auszahlungen anbietest). Vorher storniert der Server die Lightning-Zahlung und prüft mit LND, dass kein Versuch läuft oder bezahlt ist.',
     pl_PL:
-      'Spory nie są już rozstrzygane automatycznie: gdy czat wygaśnie, a jedna strona milczy, zlecenie trafia do ciebie jako spór. Admin: „Ukarz sprzedającego/kupującego” bez wymiany, wynik rozstrzygniętego sporu, nowa strona nieudanych wypłat.',
+      'Gdy wypłata Lightning dla kupującego się nie powiedzie, może on teraz przejść na adres onchain na ekranie „płatność nieudana” (tylko jeśli oferujesz wypłaty onchain). Wcześniej serwer anuluje płatność Lightning i sprawdza w LND, że żadna próba nie trwa ani nie została opłacona.',
     fr_FR:
-      "Les litiges ne sont plus résolus automatiquement : si un chat expire avec une partie silencieuse, l'ordre vous arrive comme litige. Admin : « Pénaliser le vendeur/l'acheteur » sans échange, résultat d'un litige résolu, nouvelle page des paiements échoués.",
+      "Si le paiement Lightning à un acheteur échoue, il peut maintenant passer à une adresse onchain depuis l'écran « paiement échoué » (seulement si vous proposez les paiements onchain). Avant, le serveur annule le paiement Lightning et vérifie avec LND qu'aucune tentative n'est en cours ni payée.",
   },
   migrations: {
     up: async () => {},
