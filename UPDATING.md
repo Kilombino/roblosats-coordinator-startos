@@ -11,7 +11,7 @@ Kilombino/roblosats, branch `roblosats`), the same one the Umbrel app `kilombino
 
 - `startos/manifest/index.ts`: the `roblosats` image's `dockerTag` (`<tag>@sha256:<index digest>`); the
   same for `tor` and `relay` if the Umbrel app moved them.
-- `startos/versions/current.ts`: the Roblosats version (`0.9.3:0` for 0.9.3; up to 0.8.8-rlN it was `0.8.8.N:0`), `:1`,
+- `startos/versions/current.ts`: the Roblosats version (`0.9.5:0` for 0.9.5; up to 0.8.8-rlN it was `0.8.8.N:0`), `:1`,
   `:2`… for package-only changes, and the release notes. Move the previous `current` to its own file in
   `startos/versions/` and add it to the graph's `other`.
 - `assets/`: if the Umbrel app's own files changed (`tools/roblosats-coordinator` in the store repo:
