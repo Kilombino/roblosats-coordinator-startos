@@ -15,6 +15,12 @@ export const shape = z.object({
   POSTGRES_PASSWORD: z.string().regex(/^[0-9a-f]{48}$/),
   NOSTR_NSEC: z.string().regex(/^[0-9a-f]{64}$/),
   ADMIN_PASSWORD: z.string().regex(/^[A-Za-z0-9]{24,}$/),
+  // 0.9.0: made by the app's page the first time on-chain escrow is switched on (never before,
+  // never shown); the coordinator's keys of every on-chain escrow and bond derive from it.
+  ESCROW_SECRET: z
+    .string()
+    .regex(/^[0-9a-f]{64}$/)
+    .optional(),
 })
 
 export const newSecrets = () => ({

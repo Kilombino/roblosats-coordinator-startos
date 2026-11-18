@@ -3,9 +3,11 @@
 # (BLAKE2b) Companion's RPC (NODE_RPC_UPSTREAM, its address on StartOS's bridge) with the node's
 # current cookie, read again for every call, so a restart of the node (which writes a new cookie)
 # needs no restart here. Whatever user and password the caller sends are ignored. Only the
-# coordinator (address checks for on-chain payouts) and the panel (block height) use it.
+# coordinator (address checks for on-chain payouts; with on-chain escrow, its watch-only wallet,
+# fees and broadcasts) and the panel (block height, the watch-only wallet) use it.
 import base64
 import os
+import re
 import urllib.error
 import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -36,7 +38,10 @@ class Handler(BaseHTTPRequestHandler):
                 auth = base64.b64encode(f.read().strip().encode()).decode()
         except OSError:
             return self.reply(503, b'{"result":null,"error":{"code":-1,"message":"The node has not written its cookie yet"},"id":null}')
-        req = urllib.request.Request("http://%s/" % UPSTREAM, data=body, method="POST", headers={
+        # The node's root, or one wallet's endpoint (/wallet/<name>: the on-chain escrow's
+        # watch-only wallet); nothing else.
+        path = self.path if re.fullmatch(r"/(wallet/[A-Za-z0-9._%-]{1,64})?", self.path) else "/"
+        req = urllib.request.Request("http://%s%s" % (UPSTREAM, path), data=body, method="POST", headers={
             "Content-Type": "application/json", "Authorization": "Basic " + auth})
         try:
             with urllib.request.urlopen(req, timeout=60) as r:

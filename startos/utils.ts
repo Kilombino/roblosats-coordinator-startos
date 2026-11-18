@@ -123,6 +123,10 @@ export const roblosatsEnv = {
   REWARD_WITHDRAW_DAILY_MAX: '250000',
   REWARD_WITHDRAW_COOLDOWN: '86400',
   REWARD_WITHDRAW_GLOBAL_DAILY_MAX: '500000',
+  // On-chain escrow (optional, off by default; switched on from the app's page): the watch-only
+  // descriptor wallet (no private keys) the server keeps on Knots (BLAKE2b) to follow bond and
+  // deposit addresses. ESCROW_SECRET comes from secrets.env.
+  ESCROW_WATCH_WALLET: 'roblosats-coordinator-escrow',
   // The node, through node-rpc.py (which signs each call with the node's cookie).
   NODE_KNOTS_BLAKE2B_IP: '127.0.0.1',
   NODE_KNOTS_BLAKE2B_PORT: String(ports.nodeRpc),

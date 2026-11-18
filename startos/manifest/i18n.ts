@@ -33,8 +33,10 @@ export const lndDescription = {
 }
 
 export const nodeDescription = {
-  en_US: 'Checks the addresses of on-chain payouts to buyers',
-  es_ES: 'Comprueba las direcciones de los pagos on-chain a los compradores',
+  en_US:
+    'Checks the addresses of on-chain payouts to buyers and, if you switch on on-chain escrow, keeps its watch-only wallet (no private keys)',
+  es_ES:
+    'Comprueba las direcciones de los pagos on-chain a los compradores y, si activas el depósito on-chain, guarda su cartera de solo lectura (sin claves privadas)',
   de_DE: 'Prüft die Adressen der On-Chain-Auszahlungen an Käufer',
   pl_PL: 'Sprawdza adresy wypłat on-chain dla kupujących',
   fr_FR: 'Vérifie les adresses des paiements on-chain aux acheteurs',

@@ -97,6 +97,8 @@ export const main = sdk.setupMain(async ({ effects }) => {
     SECRET_KEY: secrets.SECRET_KEY,
     POSTGRES_PASSWORD: secrets.POSTGRES_PASSWORD,
     NOSTR_NSEC: secrets.NOSTR_NSEC,
+    // On-chain escrow (optional): run.sh keeps it off without the secret and an address.
+    ESCROW_SECRET: secrets.ESCROW_SECRET ?? '',
     LND_GRPC_HOST: lndGrpc,
   }
   const run = (command: string[]) =>

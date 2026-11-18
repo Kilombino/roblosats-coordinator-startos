@@ -27,8 +27,22 @@ Running a coordinator means solving disputes and keeping your Lightning node hea
 
 - Settings saved on the page take effect when the service restarts. **Never restart, stop or update the service while an order is in progress** (the page shows how many there are).
 - Settings shows *Recommended* next to each fee and limit, and **Use the recommended values** puts them all back (your name, notice and Telegram stay).
-- **Backup → Export** gives one file, encrypted with your passphrase, with the onion's keys, the Nostr key, the secrets, your settings and the database. If the server breaks, install the service on a new one, then **Backup → Import** the file and restart: the coordinator comes back with the same onion, Nostr key and orders. Only import onto a new install, with the old one off for good. StartOS's own backups cover this service as well. Lightning Fork is backed up on its own (seed and channel backup).
+- **Backup → Export** gives one file, encrypted with your passphrase, with the onion's keys, the Nostr key, the secrets (with the escrow secret, once on-chain escrow is on), your settings and the database. If the server breaks, install the service on a new one, then **Backup → Import** the file and restart: the coordinator comes back with the same onion, Nostr key and orders. Only import onto a new install, with the old one off for good. StartOS's own backups cover this service as well. Lightning Fork is backed up on its own (seed and channel backup).
 - Disputes: open them from the page or the admin panel, read both robots' chat, ask for proof and settle it for one of them.
+
+## On-chain escrow (optional)
+
+The coordinator is **Lightning-only by default**. Since Roblosats 0.9.0 it can also offer non-custodial on-chain orders: the trade sits in a 2-of-3 Taproot output (seller, buyer, coordinator) on the BLAKE2b chain, the bonds are on-chain too, and both traders pre-sign a rescue that pays each side its own share after the rescue timelock, so their funds never depend on you staying online.
+
+To offer it, in **Settings → On-chain escrow (optional)**:
+
+1. Switch **On-chain escrow** on and paste **your fee and penalty address**: a segwit (`bc1q…`) or taproot (`bc1p…`) address of a wallet of your own on the BLAKE2b chain. Your on-chain fees and the bonds of robots that break the rules are paid to it.
+2. Check the **order limits** (20,000 to 101,000 sats to start, as Kilobot), the **robots allowed** (empty = everyone; a comma list of robot nicknames, hash ids or Nostr keys keeps on-chain orders private to them, to test with two robots of your own first) and the **rescue timelock** (2016 blocks).
+3. Save and restart the service. The status page then shows the on-chain state, and Roblosats apps offer on-chain orders for your coordinator.
+
+When you switch it on the first time, the page makes the **escrow secret**: it is kept in this service's `secrets.env`, never shown and never written to the logs. The coordinator's keys of every on-chain escrow and bond are derived from it **and from your coordinator name**. **Back it up**: it is in **Backup → Export** and in StartOS's backups of this service, so export a new backup right after switching on. If it is lost, you can no longer co-sign open escrows (the traders would have to wait for their rescue). Never change the coordinator name, the secret or the rescue timelock while an on-chain order is open; the page refuses to while it sees one.
+
+The coordinator also creates a **watch-only wallet** (`roblosats-coordinator-escrow`, no private keys) on Knots (BLAKE2b) Companion to follow deposit and bond addresses and the mempool; the node needs wallet support. If the status page says the wallet could not be set up, check Knots.
 
 ### Actions
 
