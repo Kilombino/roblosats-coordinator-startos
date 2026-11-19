@@ -1,21 +1,22 @@
-import { VersionInfo } from '@start9labs/start-sdk'
+import { IMPOSSIBLE, VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.5:0',
+  version: '0.9.7:0',
   releaseNotes: {
     en_US:
-      "Roblosats 0.9.5 (includes 0.9.4). On-chain orders: the seller's app signs the cooperative release alone through its leaf with the coordinator, which adds its signature and broadcasts; the buyer signs nothing and nobody has to come back for a second round. Releases started with older apps can be finished the same way. New mixed orders where the buyer took with Lightning use the seller's own rescue, so the buyer signs nothing on-chain. From 0.9.4: a notice for every step of an order (Telegram, Nostr and webhook, in English, Spanish or Catalan) and reminders 30 and 10 minutes before every deadline. No database migration; older escrows and older apps keep working.",
+      "Roblosats 0.9.7. A free onchain bond goes back by itself: the owner's app pre-signs the return to its return or payout address with the penalty, and your coordinator broadcasts it only once the bond is free (never while it can be penalized or is in a deposit); otherwise the manual return works as before. The order summary shows each onchain payout as in the mempool or confirmed. A sat order paid only with Spamcoin is kept in Spamcoin. One database migration (0070), applied on start: update with no order in progress.",
     es_ES:
-      'Roblosats 0.9.5 (incluye la 0.9.4). Órdenes on-chain: la app del vendedor firma sola la liberación cooperativa por su hoja con el coordinador, que añade su firma y la emite; el comprador no firma nada y nadie tiene que volver para una segunda ronda. Las liberaciones empezadas con apps anteriores se terminan igual. Las órdenes mixtas nuevas en que el comprador tomó con Lightning usan el rescate propio del vendedor, así que el comprador no firma nada on-chain. De la 0.9.4: un aviso en cada paso de la orden (Telegram, Nostr y webhook, en inglés, castellano o catalán) y recordatorios 30 y 10 minutos antes de cada plazo. Sin migración de la base de datos; los depósitos y las apps anteriores siguen funcionando.',
+      'Roblosats 0.9.7. Una fianza on-chain libre vuelve sola: la app del dueño firma de antemano, con la penalización, la devolución a su dirección de devolución o de cobro, y tu coordinador la emite solo cuando la fianza queda libre (nunca mientras se pueda penalizar o esté en un depósito); si no, la devolución manual funciona como antes. El resumen de la orden muestra cada pago on-chain en la mempool o confirmado. Una orden en sats pagada solo con Spamcoin se queda en Spamcoin. Una migración de la base de datos (0070), al arrancar: actualiza sin órdenes en curso.',
     de_DE:
-      'Roblosats 0.9.5 (inklusive 0.9.4). Onchain-Orders: Die App des Verkäufers signiert die kooperative Freigabe allein über ihr Blatt mit dem Koordinator; der Käufer signiert nichts. Aus 0.9.4: eine Nachricht bei jedem Schritt einer Order und Erinnerungen vor jeder Frist. Keine Datenbankmigration.',
+      'Roblosats 0.9.7. Eine freie Onchain-Kaution geht automatisch zurück; die Zusammenfassung zeigt den Status der Onchain-Auszahlung. Eine Datenbankmigration (0070): ohne laufende Orders aktualisieren.',
     pl_PL:
-      'Roblosats 0.9.5 (zawiera 0.9.4). Zlecenia onchain: aplikacja sprzedającego sama podpisuje zwolnienie przez swój liść z koordynatorem; kupujący niczego nie podpisuje. Z 0.9.4: powiadomienie przy każdym kroku zlecenia i przypomnienia przed każdym terminem. Bez migracji bazy danych.',
+      'Roblosats 0.9.7. Wolna kaucja onchain wraca sama; podsumowanie pokazuje stan wypłaty onchain. Jedna migracja bazy danych (0070): aktualizuj bez trwających zleceń.',
     fr_FR:
-      "Roblosats 0.9.5 (inclut 0.9.4). Ordres onchain : l'application du vendeur signe seule la libération coopérative par sa feuille avec le coordinateur ; l'acheteur ne signe rien. Depuis 0.9.4 : une notification à chaque étape d'un ordre et des rappels avant chaque échéance. Pas de migration de la base de données.",
+      "Roblosats 0.9.7. Une caution onchain libre revient toute seule ; le résumé montre l'état du paiement onchain. Une migration de la base de données (0070) : mettez à jour sans ordre en cours.",
   },
   migrations: {
     up: async () => {},
-    down: async () => {},
+    // 0.9.7 adds DB migration 0070 (applied by the app on start): an older app cannot run on it
+    down: IMPOSSIBLE,
   },
 })
