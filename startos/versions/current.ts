@@ -1,22 +1,22 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.9:0',
+  version: '0.9.9:1',
   releaseNotes: {
     en_US:
-      "Roblosats 0.9.9. Payout, refund and bond return addresses can also be legacy (1…) and P2SH (3…); outputs use the dust threshold of each address type at your node's dust relay fee. A seller's leftover funding goes back to its payout address inside the deposit. Fair deadline: when a trader finishes its part of the on-chain setup, the other gets at least an hour. The order and dispute pages list the traders' addresses and every deposit and release output with its type. One migration (0071) that only records validators: no change to the database.",
+      'Roblosats 0.9.9-1 (server only). On-chain disputes can be resolved from the dispute page: it checks what the on-chain escrow needs and says, with the same numbers the release will use, who gets how many sats at which address, whose app must sign and what you keep; then it shows whose signature is missing and the release. A hybrid order\'s settled Lightning taker bond comes back as rewards on "return everything". The trader who does not sign a dispute release now waits for the other instead of seeing "signing together". The admin panel is also in Catalan. No database migrations.',
     es_ES:
-      'Roblosats 0.9.9. Las direcciones de cobro, devolución y fianza pueden ser también legacy (1…) y P2SH (3…); cada salida usa el límite de polvo de su tipo de dirección con el dustrelayfee de tu nodo. Lo que sobra de la aportación del vendedor vuelve a su dirección de cobro dentro del depósito. Plazo justo: cuando un trader termina su parte del montaje on-chain, el otro tiene al menos una hora. Las páginas de orden y de disputa listan las direcciones de los traders y cada salida del depósito y de la liberación con su tipo. Una migración (0071) que solo registra validadores: no cambia la base de datos.',
+      'Roblosats 0.9.9-1 (solo servidor). Las disputas on-chain se pueden resolver desde la página de la disputa: comprueba lo que necesita el depósito on-chain y dice, con los mismos números que usará la liberación, quién recibe cuántos sats y en qué dirección, qué app tiene que firmar y qué te quedas; después muestra qué firma falta y la liberación. En una orden híbrida, la fianza Lightning del tomador ya liquidada vuelve como recompensa en «Devolver todo». El trader que no firma una liberación de disputa espera al otro en vez de ver «firmando juntos». El panel también está en catalán. Sin migraciones de la base de datos.',
     de_DE:
-      'Roblosats 0.9.9. Auch Legacy- (1…) und P2SH-Adressen (3…); übriges Funding geht zur Auszahlungsadresse zurück; faire Frist von mindestens einer Stunde. Migration 0071 ändert die Datenbank nicht.',
+      'Roblosats 0.9.9-1 (nur Server). Onchain-Streitfälle lassen sich auf der Streitfallseite lösen, mit Beträgen, Adressen und wer signieren muss. Keine Datenbankmigration.',
     pl_PL:
-      'Roblosats 0.9.9. Również adresy legacy (1…) i P2SH (3…); nadwyżka wraca na adres wypłaty; sprawiedliwy termin co najmniej godziny. Migracja 0071 nie zmienia bazy danych.',
+      'Roblosats 0.9.9-1 (tylko serwer). Spory onchain można rozstrzygać na stronie sporu: kwoty, adresy i kto musi podpisać. Bez migracji bazy danych.',
     fr_FR:
-      "Roblosats 0.9.9. Adresses legacy (1…) et P2SH (3…) aussi ; le surplus revient à l'adresse de paiement ; délai équitable d'au moins une heure. La migration 0071 ne change pas la base de données.",
+      'Roblosats 0.9.9-1 (serveur seulement). Les litiges onchain se règlent depuis la page du litige : montants, adresses et qui doit signer. Aucune migration de la base de données.',
   },
   migrations: {
     up: async () => {},
-    // 0071 only records validators (no SQL): going back to 0.9.8 is safe
+    // no database migration since 0.9.9: going back to it is safe
     down: async () => {},
   },
 })
