@@ -1,22 +1,22 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.8:0',
+  version: '0.9.9:0',
   releaseNotes: {
     en_US:
-      'Roblosats 0.9.8. When another taker locks first (a Lightning bond locks in seconds, an on-chain one needs a confirmation), the other pending on-chain takes end at once: their bonds are freed (never penalized) and their robots are told; a robot whose take is over sees only its bond on the order page and takes it back from there. Two on-chain taker bonds locking at the same moment go to the robot that took first. No database migrations.',
+      "Roblosats 0.9.9. Payout, refund and bond return addresses can also be legacy (1…) and P2SH (3…); outputs use the dust threshold of each address type at your node's dust relay fee. A seller's leftover funding goes back to its payout address inside the deposit. Fair deadline: when a trader finishes its part of the on-chain setup, the other gets at least an hour. The order and dispute pages list the traders' addresses and every deposit and release output with its type. One migration (0071) that only records validators: no change to the database.",
     es_ES:
-      'Roblosats 0.9.8. Cuando otro taker bloquea primero (una fianza Lightning se bloquea en segundos, una on-chain necesita una confirmación), las demás tomas on-chain pendientes terminan al momento: sus fianzas quedan libres (nunca se penalizan) y sus robots reciben un aviso; un robot cuya toma terminó ve solo su fianza en la página de la orden y la recupera desde allí. Si dos fianzas on-chain se bloquean a la vez gana el robot que tomó primero. Sin migraciones de la base de datos.',
+      'Roblosats 0.9.9. Las direcciones de cobro, devolución y fianza pueden ser también legacy (1…) y P2SH (3…); cada salida usa el límite de polvo de su tipo de dirección con el dustrelayfee de tu nodo. Lo que sobra de la aportación del vendedor vuelve a su dirección de cobro dentro del depósito. Plazo justo: cuando un trader termina su parte del montaje on-chain, el otro tiene al menos una hora. Las páginas de orden y de disputa listan las direcciones de los traders y cada salida del depósito y de la liberación con su tipo. Una migración (0071) que solo registra validadores: no cambia la base de datos.',
     de_DE:
-      'Roblosats 0.9.8. Ein Onchain-Taker, der das Rennen verliert, bekommt seine Kaution sofort frei und wird benachrichtigt. Keine Datenbankmigration.',
+      'Roblosats 0.9.9. Auch Legacy- (1…) und P2SH-Adressen (3…); übriges Funding geht zur Auszahlungsadresse zurück; faire Frist von mindestens einer Stunde. Migration 0071 ändert die Datenbank nicht.',
     pl_PL:
-      'Roblosats 0.9.8. Taker onchain, który przegra wyścig, od razu odzyskuje kaucję i dostaje powiadomienie. Bez migracji bazy danych.',
+      'Roblosats 0.9.9. Również adresy legacy (1…) i P2SH (3…); nadwyżka wraca na adres wypłaty; sprawiedliwy termin co najmniej godziny. Migracja 0071 nie zmienia bazy danych.',
     fr_FR:
-      'Roblosats 0.9.8. Un preneur onchain qui perd la course récupère sa caution tout de suite et en est averti. Aucune migration de la base de données.',
+      "Roblosats 0.9.9. Adresses legacy (1…) et P2SH (3…) aussi ; le surplus revient à l'adresse de paiement ; délai équitable d'au moins une heure. La migration 0071 ne change pas la base de données.",
   },
   migrations: {
     up: async () => {},
-    // no database migration since 0.9.7-1: going back to it is safe
+    // 0071 only records validators (no SQL): going back to 0.9.8 is safe
     down: async () => {},
   },
 })
