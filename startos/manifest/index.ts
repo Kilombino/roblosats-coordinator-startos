@@ -14,11 +14,11 @@ export const manifest = setupManifest({
   // db: PostgreSQL. relay: the Nostr relay's events (rebuilt from the federation).
   volumes: ['main', 'db', 'relay'],
   images: {
-    // The same images, by the same digests, as the Umbrel app 0.9.11.
+    // The same images, by the same digests, as the Umbrel app 0.9.12.
     roblosats: {
       source: {
         dockerTag:
-          'ghcr.io/kilombino/roblosats-coordinator:0.9.11@sha256:dcbf15aa1d95a43b8faa600a5892d7acb53cd907f5e8cb13eafd8f620d0d8e5c',
+          'ghcr.io/kilombino/roblosats-coordinator:0.9.12@sha256:a90c16cf7c0f9af58d4e601042fe4efd4dc6c6c76040d73e79cc8941e25bf417',
       },
       arch: ['x86_64', 'aarch64'],
     },

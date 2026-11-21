@@ -1,22 +1,22 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.11:1',
+  version: '0.9.12:0',
   releaseNotes: {
     en_US:
-      'Relay federation filter (packaging only, same server image). The Nostr relay now stores order events (kind 38383) only from the coordinators of the Roblosats federation, and ratings (31986) only of them; its sync with the other relays asks only for those and no longer copies chat wraps (1059) from them. The coordinator list follows the official federation.json by itself, checked every hour: a new coordinator is accepted with no update of this service, and on any error the last good list stays. Your own coordinator is always in the list, even before federation.json lists it. Orders of other federations stored earlier are dropped once. The list is allowed-order-pubkeys.txt in the relay volume; a line "manual" in it stops the updates.',
+      'Roblosats 0.9.12. An onchain bond is no longer penalized when a dispute opens: it waits for your decision (back to its owner on chain, or penalized then), with a safety penalty before its timelock. Penalties use a fee ladder (ESCROW_PENALTY_RATES). A new watch tells robots, and you (on-chain alert group), when Spamcoin (SHA-256) lands on an onchain bond or funding address by mistake (mempool.space onion over Tor; SPAMCHAIN_WATCH=False turns it off). The relay federation filter of 0.9.11:1 is kept. One additive database migration (0072).',
     es_ES:
-      'Filtro de federación en el relay (solo empaquetado, misma imagen del servidor). El relay Nostr guarda ya solo las órdenes (kind 38383) de los coordinadores de la federación Roblosats, y solo las valoraciones (31986) de ellos; su sincronización con los demás relays pide solo eso y deja de copiar los gift wraps de chat (1059). La lista de coordinadores sigue sola al federation.json oficial, revisado cada hora: un coordinador nuevo se acepta sin actualizar este servicio, y ante cualquier error se queda la última lista buena. Tu propio coordinador siempre está en la lista, aunque federation.json aún no lo tenga. Las órdenes de otras federaciones guardadas antes se borran una vez. La lista es allowed-order-pubkeys.txt en el volumen del relay; una línea "manual" detiene las actualizaciones.',
+      'Roblosats 0.9.12. Una fianza on-chain ya no se penaliza al abrirse una disputa: espera a tu decisión (vuelve a su dueño on-chain, o se penaliza entonces), con una penalización de seguridad antes de su timelock. Las penalizaciones usan una escalera de comisiones (ESCROW_PENALTY_RATES). Un vigilante avisa a los robots, y a ti (grupo de avisos on-chain), cuando llegan Spamcoin (SHA-256) por error a una dirección de fianza o de aportación (onion de mempool.space por Tor; SPAMCHAIN_WATCH=False lo apaga). Se mantiene el filtro de federación del relay de 0.9.11:1. Una migración aditiva de la base de datos (0072).',
     de_DE:
-      'Föderationsfilter im Relay: nur Orders und Bewertungen der Roblosats-Föderation, Liste stündlich aus federation.json. Gleiches Server-Image.',
+      'Roblosats 0.9.12. Onchain-Kautionen werden bei Streitfällen erst bei der Entscheidung bestraft; Strafen mit Gebührenleiter; Überwachung von Spamcoin-Zahlungen (SHA-256) auf Onchain-Adressen. Relay-Föderationsfilter bleibt. Eine additive Datenbankmigration.',
     pl_PL:
-      'Filtr federacji w relayu: tylko zlecenia i oceny federacji Roblosats, lista co godzinę z federation.json. Ten sam obraz serwera.',
+      'Roblosats 0.9.12. Kaucje onchain w sporze są karane dopiero przy decyzji; kary z drabiną opłat; nadzór nad wpłatami Spamcoin (SHA-256) na adresy onchain. Filtr federacji relaya zostaje. Jedna addytywna migracja bazy danych.',
     fr_FR:
-      'Filtre de fédération du relais : seulement les ordres et avis de la fédération Roblosats, liste mise à jour chaque heure depuis federation.json. Même image serveur.',
+      'Roblosats 0.9.12. Les cautions onchain ne sont pénalisées qu’à la décision du litige ; pénalités avec échelle de frais ; surveillance des paiements Spamcoin (SHA-256) sur les adresses onchain. Le filtre de fédération du relais est conservé. Une migration additive de la base de données.',
   },
   migrations: {
     up: async () => {},
-    // packaging only: going back is safe
+    // migration 0072 only adds columns with database defaults: 0.9.11 runs on it, going back is safe
     down: async () => {},
   },
 })
