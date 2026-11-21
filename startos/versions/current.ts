@@ -1,22 +1,22 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.11:0',
+  version: '0.9.11:1',
   releaseNotes: {
     en_US:
-      'Roblosats 0.9.11. Nostr order book: events of orders that left the book are now accepted by the relay (an expired order kept being listed), with NIP-69 statuses and a NIP-09 deletion. Automatic bond returns: a fee ladder (ESCROW_AUTO_RETURN_RATES, default 1,3 sat/vB); the cheapest rung the mempool needs is sent and bumped by RBF if it gets stuck. No database migrations. The Android app gains a Clearnet mode (beta): phones in that mode reach a coordinator with a clearnet URL in federation.json directly (and see its IP).',
+      'Relay federation filter (packaging only, same server image). The Nostr relay now stores order events (kind 38383) only from the coordinators of the Roblosats federation, and ratings (31986) only of them; its sync with the other relays asks only for those and no longer copies chat wraps (1059) from them. The coordinator list follows the official federation.json by itself, checked every hour: a new coordinator is accepted with no update of this service, and on any error the last good list stays. Your own coordinator is always in the list, even before federation.json lists it. Orders of other federations stored earlier are dropped once. The list is allowed-order-pubkeys.txt in the relay volume; a line "manual" in it stops the updates.',
     es_ES:
-      'Roblosats 0.9.11. Libro Nostr: el relay acepta ya los eventos de las órdenes que salen del libro (una orden caducada seguía listada), con estados NIP-69 y borrado NIP-09. Devolución automática de fianzas: escalera de comisiones (ESCROW_AUTO_RETURN_RATES, por defecto 1,3 sat/vB); se manda el escalón más barato que pide la mempool y se sube por RBF si se atasca. Sin migraciones de la base de datos. La app de Android estrena el modo Clearnet (beta): en ese modo llega directa a los coordinadores con URL clearnet en federation.json (y ve su IP).',
+      'Filtro de federación en el relay (solo empaquetado, misma imagen del servidor). El relay Nostr guarda ya solo las órdenes (kind 38383) de los coordinadores de la federación Roblosats, y solo las valoraciones (31986) de ellos; su sincronización con los demás relays pide solo eso y deja de copiar los gift wraps de chat (1059). La lista de coordinadores sigue sola al federation.json oficial, revisado cada hora: un coordinador nuevo se acepta sin actualizar este servicio, y ante cualquier error se queda la última lista buena. Tu propio coordinador siempre está en la lista, aunque federation.json aún no lo tenga. Las órdenes de otras federaciones guardadas antes se borran una vez. La lista es allowed-order-pubkeys.txt en el volumen del relay; una línea "manual" detiene las actualizaciones.',
     de_DE:
-      'Roblosats 0.9.11. Nostr-Orderbuch korrigiert; automatische Kautionsrückgabe mit Gebührenleiter. Keine Datenbankmigration.',
+      'Föderationsfilter im Relay: nur Orders und Bewertungen der Roblosats-Föderation, Liste stündlich aus federation.json. Gleiches Server-Image.',
     pl_PL:
-      'Roblosats 0.9.11. Poprawiona księga Nostr; automatyczny zwrot kaucji z drabiną opłat. Bez migracji bazy danych.',
+      'Filtr federacji w relayu: tylko zlecenia i oceny federacji Roblosats, lista co godzinę z federation.json. Ten sam obraz serwera.',
     fr_FR:
-      'Roblosats 0.9.11. Carnet Nostr corrigé ; retour automatique des cautions avec une échelle de frais. Aucune migration de la base de données.',
+      'Filtre de fédération du relais : seulement les ordres et avis de la fédération Roblosats, liste mise à jour chaque heure depuis federation.json. Même image serveur.',
   },
   migrations: {
     up: async () => {},
-    // no database migration since 0.9.9: going back is safe
+    // packaging only: going back is safe
     down: async () => {},
   },
 })

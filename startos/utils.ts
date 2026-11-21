@@ -133,3 +133,49 @@ export const roblosatsEnv = {
   NODE_KNOTS_BLAKE2B_USER: 'roblosats',
   NODE_KNOTS_BLAKE2B_PASS: 'cookie',
 } as const
+
+/**
+ * The coordinator's Nostr public key (x-only, hex) from NOSTR_NSEC (hex), or '' if it is not 64 hex
+ * characters. Plain secp256k1 with BigInt: only the relay gets the result, never the secret (its
+ * write policy must take this coordinator's orders even before federation.json lists it).
+ */
+export function nostrPubkeyHex(secretHex: string | undefined): string {
+  const h = (secretHex ?? '').trim().replace(/^['"]|['"]$/g, '')
+  if (!/^[0-9a-fA-F]{64}$/.test(h)) return ''
+  const P = 2n ** 256n - 2n ** 32n - 977n
+  const N = 0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141n
+  const k = BigInt('0x' + h)
+  if (k === 0n || k >= N) return ''
+  const mod = (a: bigint) => ((a % P) + P) % P
+  const inv = (a: bigint) => {
+    let [r, x, e] = [1n, mod(a), P - 2n]
+    while (e > 0n) {
+      if (e & 1n) r = mod(r * x)
+      x = mod(x * x)
+      e >>= 1n
+    }
+    return r
+  }
+  type Pt = [bigint, bigint] | null
+  const add = (p: Pt, q: Pt): Pt => {
+    if (!p) return q
+    if (!q) return p
+    if (p[0] === q[0] && mod(p[1] + q[1]) === 0n) return null
+    const l =
+      p[0] === q[0] && p[1] === q[1]
+        ? mod(3n * p[0] * p[0] * inv(2n * p[1]))
+        : mod((q[1] - p[1]) * inv(q[0] - p[0]))
+    const x = mod(l * l - p[0] - q[0])
+    return [x, mod(l * (p[0] - x) - p[1])]
+  }
+  let r: Pt = null
+  let g: Pt = [
+    0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798n,
+    0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8n,
+  ]
+  for (let e = k; e > 0n; e >>= 1n) {
+    if (e & 1n) r = add(r, g)
+    g = add(g, g)
+  }
+  return r ? r[0].toString(16).padStart(64, '0') : ''
+}

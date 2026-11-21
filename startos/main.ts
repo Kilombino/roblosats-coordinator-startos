@@ -11,6 +11,7 @@ import {
   mnt,
   nodeId,
   nodeRpcBridge,
+  nostrPubkeyHex,
   ports,
   roblosatsEnv,
   uiPort,
@@ -461,6 +462,24 @@ export const main = sdk.setupMain(async ({ effects }) => {
             mountpoint: '/app/external_urls.txt',
             type: 'file',
           })
+          // 0.9.11:1: only this federation's orders and ratings (write policy), with the
+          // coordinator list kept in step with federation.json every hour (relay-fedlist.py, run
+          // from the sync); the list itself lives in the relay volume.
+          .mountAssets({
+            subpath: 'relay-write-policy.py',
+            mountpoint: '/etc/strfry/write-policy.py',
+            type: 'file',
+          })
+          .mountAssets({
+            subpath: 'relay-fedlist.py',
+            mountpoint: '/app/fedlist.py',
+            type: 'file',
+          })
+          .mountAssets({
+            subpath: 'relay-allowed-order-pubkeys.txt',
+            mountpoint: '/app/allowed-order-pubkeys.seed',
+            type: 'file',
+          })
           .mountVolume({
             volumeId: 'relay',
             subpath: null,
@@ -471,7 +490,11 @@ export const main = sdk.setupMain(async ({ effects }) => {
       ),
       exec: {
         command: sdk.useEntrypoint(),
-        env: { TOR_PROXY: `127.0.0.1:${ports.socks}` },
+        env: {
+          TOR_PROXY: `127.0.0.1:${ports.socks}`,
+          // Only the public key: the relay always takes this coordinator's own orders.
+          OWN_PUBKEY: nostrPubkeyHex(secrets.NOSTR_NSEC),
+        },
       },
       ready: {
         display: i18n('Nostr relay'),

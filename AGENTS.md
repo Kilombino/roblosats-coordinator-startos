@@ -8,7 +8,8 @@ bare clone with no workspace, the full guide is at <https://docs.start9.com/pack
 
 - **`assets/` mirrors the Umbrel app's files** (Kilombino/umbrel-store `tools/roblosats-coordinator`).
   `panel.py`, `defaults.env`, `db-tool.sh`, `relay-sync.sh`, `external_urls.txt`, `strfry.conf`,
-  `federation_urls.txt` are byte-for-byte copies (`panel.py` picks paths and wording from
+  `federation_urls.txt`, `relay-write-policy.py`, `relay-fedlist.py`, `relay-allowed-order-pubkeys.txt`
+  are byte-for-byte copies (`panel.py` picks paths and wording from
   `PANEL_PLATFORM`): copy them, don't edit them here. What differs on purpose: run.sh sourcing the
   settings itself and taking the node from `node-rpc.py` (new here), and nginx checking StartOS's
   login and dropping its `Authorization` header before Django.
