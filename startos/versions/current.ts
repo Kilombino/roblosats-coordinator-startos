@@ -1,22 +1,22 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '0.9.15:0',
+  version: '0.9.16:0',
   releaseNotes: {
     en_US:
-      'Roblosats 0.9.15 ("Stats for Nerds"). The 24 h contracted volume counts trades paid in Spamcoin and contracts taken with an onchain bond (they never logged a market tick); ticks of 1 BTC or more and Spamcoin prices now fit (migration 0075, it only widens two columns). The image records its commit, linked from the app; your Lightning node links to its Nodex page. To count your past trades taken with an onchain bond: backfill_market_ticks --apply (see COORDINATOR.md). Going back to 0.9.14 is safe.',
+      'Roblosats 0.9.16. Dispute winners (and the innocent side of a penalty) now also get SLASHED_BOND_REWARD_SPLIT of the loser\'s bond in Lightning-escrow orders (pure Lightning, Hybrid B, Hybrid C), as on-chain escrows already did; the dispute page shows the share and how the lost bond is split. New "At a glance" panel on the dispute page. Admin translations fixed (de/fr/it/ru). No database migrations: going back to 0.9.15 is safe.',
     es_ES:
-      'Roblosats 0.9.15 («estadísticas para nerds»). El volumen contratado de 24 h cuenta los intercambios pagados en Spamcoin y los contratos tomados con fianza on-chain (nunca registraban un tick de mercado); los ticks de 1 BTC o más y los precios en Spamcoin ya caben (migración 0075, solo ensancha dos columnas). La imagen guarda su commit, enlazado desde la app; tu nodo Lightning enlaza a su página en Nodex. Para contar tus intercambios pasados tomados con fianza on-chain: backfill_market_ticks --apply (ver COORDINATOR.md). Volver a 0.9.14 es seguro.',
+      'Roblosats 0.9.16. Los ganadores de una disputa (y el inocente de una penalización) reciben también SLASHED_BOND_REWARD_SPLIT de la fianza del perdedor en órdenes con depósito Lightning (Lightning, Híbrida B, Híbrida C), como ya ocurría en los depósitos on-chain; la página de la disputa muestra esa parte y cómo se reparte la fianza perdida. Nuevo panel «De un vistazo» en la página de la disputa. Traducciones del panel corregidas (de/fr/it/ru). Sin migraciones: volver a 0.9.15 es seguro.',
     de_DE:
-      'Roblosats 0.9.15: 24-h-Volumen mit Spamcoin- und Onchain-Kautions-Trades; Commit- und Nodex-Links. Eine Migration (0075, nur breitere Spalten); Zurück zu 0.9.14 ist sicher.',
+      'Roblosats 0.9.16. Gewinner eines Streitfalls erhalten auch bei Lightning-Treuhand einen Anteil der Kaution des Verlierers; neues Feld „Auf einen Blick“; Übersetzungen korrigiert. Keine Migrationen; Zurück zu 0.9.15 ist sicher.',
     pl_PL:
-      'Roblosats 0.9.15: wolumen 24 h z transakcjami Spamcoin i z kaucją onchain; linki do commita i Nodex. Jedna migracja (0075, tylko szersze kolumny); powrót do 0.9.14 jest bezpieczny.',
+      'Roblosats 0.9.16. Zwycięzcy sporu dostają część kaucji przegranego także przy depozycie Lightning; nowy panel „W skrócie”; poprawione tłumaczenia. Bez migracji; powrót do 0.9.15 jest bezpieczny.',
     fr_FR:
-      'Roblosats 0.9.15 : volume 24 h avec les échanges Spamcoin et à caution onchain ; liens du commit et Nodex. Une migration (0075, colonnes élargies seulement) ; revenir à 0.9.14 est sûr.',
+      'Roblosats 0.9.16. Les gagnants d\'un litige reçoivent une part de la caution du perdant aussi avec un séquestre Lightning ; nouveau panneau « En un coup d\'œil » ; traductions corrigées. Aucune migration ; revenir à 0.9.15 est sûr.',
   },
   migrations: {
     up: async () => {},
-    // 0075 only widens two columns: 0.9.14 runs on it
+    // no migrations: 0.9.15 runs on the same database
     down: async () => {},
   },
 })
