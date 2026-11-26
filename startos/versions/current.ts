@@ -12,7 +12,7 @@ export const current = VersionInfo.of({
     pl_PL:
       'Roblosats 0.9.16. Zwycięzcy sporu dostają część kaucji przegranego także przy depozycie Lightning; nowy panel „W skrócie”; poprawione tłumaczenia. Bez migracji; powrót do 0.9.15 jest bezpieczny.',
     fr_FR:
-      'Roblosats 0.9.16. Les gagnants d\'un litige reçoivent une part de la caution du perdant aussi avec un séquestre Lightning ; nouveau panneau « En un coup d\'œil » ; traductions corrigées. Aucune migration ; revenir à 0.9.15 est sûr.',
+      "Roblosats 0.9.16. Les gagnants d'un litige reçoivent une part de la caution du perdant aussi avec un séquestre Lightning ; nouveau panneau « En un coup d'œil » ; traductions corrigées. Aucune migration ; revenir à 0.9.15 est sûr.",
   },
   migrations: {
     up: async () => {},
